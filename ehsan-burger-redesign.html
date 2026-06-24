@@ -26,29 +26,10 @@
     font-family: 'DM Sans', sans-serif;
     font-weight: 300;
     overflow-x: hidden;
-    cursor: none;
   }
 
-  /* Custom cursor */
-  .cursor {
-    width: 12px; height: 12px;
-    background: var(--ember);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9999;
-    transition: transform 0.15s ease, width 0.2s, height 0.2s;
-    transform: translate(-50%, -50%);
-  }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1.5px solid rgba(232,66,10,0.5);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9998;
-    transition: transform 0.4s ease;
-    transform: translate(-50%, -50%);
-  }
-  a:hover ~ .cursor, button:hover ~ .cursor { transform: translate(-50%,-50%) scale(2.5); }
+  /* Custom cursor - disabled */
+  .cursor, .cursor-ring { display: none; }
 
   /* NAV */
   nav {
@@ -68,8 +49,35 @@
     letter-spacing: 3px;
     color: var(--white);
     text-decoration: none;
+    display: inline-block;
+    text-align: center;
   }
   .nav-logo span { color: var(--ember); }
+  .nav-logo-sub {
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2.5px;
+    color: var(--cream);
+    margin-top: -2px;
+    text-align: center;
+    width: 100%;
+  }
+  .nav-logo-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+  }
+  .nav-logo-top {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .nav-burger-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
 
   .nav-links { display: flex; gap: 2.5rem; list-style: none; }
   .nav-links a {
@@ -89,8 +97,10 @@
     background: var(--ember);
     transition: width 0.3s ease;
   }
-  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover { color: var(--ember); }
   .nav-links a:hover::after { width: 100%; }
+  .nav-links a.active { color: var(--ember); }
+  .nav-links a.active::after { width: 100%; background: var(--ember); }
 
   .nav-cta {
     background: var(--ember);
@@ -661,6 +671,9 @@
   }
   .testimonial-card.featured .author-tag { color: rgba(255,255,255,0.7); }
 
+  /* Testimonial dots - hidden on desktop */
+  .testimonial-dots { display: none; }
+
   /* FAQ */
   .faq-section {
     background: var(--smoke);
@@ -745,10 +758,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0;
-    min-height: 500px;
   }
   .location-info {
-    padding: 7rem 5rem;
+    padding: 4rem 4rem;
     display: flex; flex-direction: column; justify-content: center;
     background: var(--smoke);
   }
@@ -775,6 +787,7 @@
     position: relative;
     overflow: hidden;
     display: flex; align-items: center; justify-content: center;
+    min-height: 420px;
   }
   .map-placeholder {
     text-align: center;
@@ -813,9 +826,21 @@
     font-size: 2.5rem;
     letter-spacing: 3px;
     color: var(--white);
-    margin-bottom: 1rem;
+    display: block;
+    line-height: 1;
   }
   .footer-brand-name span { color: var(--ember); }
+  .footer-logo-wrap {
+    margin-bottom: 1rem;
+  }
+  .footer-brand-sub {
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: var(--cream);
+    margin-top: 2px;
+  }
   .footer-desc {
     color: var(--ash);
     font-size: 0.88rem;
@@ -875,19 +900,218 @@
   .reveal-delay-2 { transition-delay: 0.2s; }
   .reveal-delay-3 { transition-delay: 0.3s; }
 
-  /* MOBILE */
-  @media (max-width: 900px) {
-    nav { padding: 1.2rem 1.5rem; }
-    .nav-links { display: none; }
-    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 4rem; }
+  /* MOBILE HAMBURGER MENU */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 101;
+    padding: 5px;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--cream);
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .nav-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.active span:nth-child(2) { opacity: 0; }
+  .nav-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* RESPONSIVE - TABLET (max-width: 1024px) */
+  @media (max-width: 1024px) {
+    nav { padding: 1.2rem 2rem; }
+    section { padding: 5rem 2rem; }
+    .hero { padding: 7rem 2rem 4rem; }
+    .about { gap: 3rem; }
+    .faq-section { gap: 3rem; }
+    .menu-grid { grid-template-columns: repeat(2, 1fr); }
+    .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-section { padding: 5rem 0 5rem 2rem; }
+    .gallery-item { width: 300px; height: 380px; }
+    .footer-top { gap: 2.5rem; }
+    .location-info { padding: 5rem 3rem; }
+  }
+
+  /* RESPONSIVE - MOBILE (max-width: 768px) */
+  @media (max-width: 768px) {
+    /* Disable custom cursor on touch devices */
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+
+    /* Nav hamburger */
+    .nav-toggle { display: flex; }
+    nav { padding: 1rem 1.5rem; }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(17,16,9,0.98);
+      backdrop-filter: blur(10px);
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 99;
+    }
+    .nav-links.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .nav-links a {
+      font-size: 1.2rem;
+      letter-spacing: 3px;
+    }
+    .nav-cta {
+      padding: 0.8rem 2rem !important;
+      font-size: 1rem !important;
+    }
+
+    /* Hero */
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 6rem 1.5rem 3rem;
+      min-height: 100svh;
+    }
     .hero-visual { display: none; }
-    section { padding: 5rem 1.5rem; }
-    .about, .faq-section, .location-section { grid-template-columns: 1fr; gap: 3rem; }
-    .menu-grid, .testimonials-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: clamp(3.2rem, 12vw, 5rem); }
+    .hero-badge { font-size: 0.65rem; margin-bottom: 1.2rem; }
+    .hero-desc { font-size: 0.9rem; margin: 1.2rem 0 2rem; }
+    .hero-actions { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+    .btn-primary, .btn-ghost { text-align: center; padding: 0.9rem 1.5rem; }
+    .hero-stats {
+      left: 1.5rem; right: 1.5rem; bottom: 1.5rem;
+      gap: 1rem; padding: 1rem;
+      justify-content: center;
+    }
+    .stat-num { font-size: 1.5rem; }
+    .video-quality-badge { display: none; }
+
+    /* Sections */
+    section { padding: 4rem 1.5rem; }
+
+    /* About */
+    .about { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-features { grid-template-columns: 1fr; }
+    .about-accent-card { right: 1rem; bottom: 1rem; }
+    .about-img-frame { aspect-ratio: 4/3; }
+
+    /* Menu */
+    .menu-grid { grid-template-columns: 1fr; }
+    .menu-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .menu-card { padding: 1.5rem; }
+
+    /* Gallery */
+    .gallery-section { padding: 4rem 0 4rem 1.5rem; }
+    .gallery-header { padding-right: 1.5rem; }
+    .gallery-item { width: 260px; height: 320px; }
+
+    /* Testimonials - Mobile Slideshow */
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 0;
+      background: none;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 1rem;
+    }
+    .testimonials-grid::-webkit-scrollbar { display: none; }
+    .testimonial-card {
+      min-width: 85%;
+      max-width: 85%;
+      scroll-snap-align: center;
+      flex-shrink: 0;
+      padding: 2rem 1.5rem;
+      border-radius: 6px;
+      margin: 0 7.5%;
+      height: auto;
+      overflow: visible;
+    }
+    .testimonial-card:first-child { margin-left: 7.5%; }
+    .testimonial-card:last-child { margin-right: 7.5%; }
+    .testimonial-text {
+      font-size: 0.95rem;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+    }
+    .testimonial-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .testimonial-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--ash);
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      padding: 0;
+    }
+    .testimonial-dot.active {
+      background: var(--ember);
+      transform: scale(1.3);
+    }
+
+    /* FAQ */
+    .faq-section { grid-template-columns: 1fr; gap: 2rem; }
+    .faq-aside { position: static; }
+    .faq-q { padding: 1.2rem 1.5rem; font-size: 0.88rem; }
+    .faq-a { padding: 0 1.5rem; }
+    .faq-item.open .faq-a { padding: 0 1.5rem 1.2rem; }
+
+    /* Location */
+    .location-section { grid-template-columns: 1fr; min-height: auto; max-height: none; height: auto; overflow: visible; }
+    .location-info { padding: 3rem 1.5rem; }
+    .location-map { min-height: 300px; }
+
+    /* Footer */
+    footer { padding: 3rem 1.5rem 1.5rem; }
     .footer-top { grid-template-columns: 1fr; gap: 2rem; }
-    .gallery-section { padding: 5rem 0 5rem 1.5rem; }
-    .gallery-item { width: 280px; height: 340px; }
-    .location-info { padding: 4rem 1.5rem; }
+    .footer-bottom { flex-direction: column; gap: 0.8rem; text-align: center; }
+
+    /* Marquee */
+    .marquee-item { font-size: 0.85rem; letter-spacing: 2px; }
+  }
+
+  /* RESPONSIVE - SMALL MOBILE (max-width: 480px) */
+  @media (max-width: 480px) {
+    nav { padding: 0.8rem 1rem; }
+    .nav-logo { font-size: 1.5rem; }
+    .nav-logo-sub { font-size: 0.55rem; letter-spacing: 2px; }
+
+    .hero { padding: 5.5rem 1rem 2.5rem; }
+    .hero h1 { font-size: clamp(2.8rem, 14vw, 4rem); }
+    .hero-desc { font-size: 0.85rem; }
+    .hero-stats { left: 1rem; right: 1rem; bottom: 1rem; gap: 0.8rem; padding: 0.8rem; }
+    .stat-num { font-size: 1.3rem; }
+    .stat-label { font-size: 0.6rem; }
+
+    section { padding: 3rem 1rem; }
+    .section-title { font-size: clamp(2.2rem, 8vw, 3rem); }
+
+    .menu-card { padding: 1.2rem; }
+    .menu-card-name { font-size: 1.2rem; }
+
+    .gallery-section { padding: 3rem 0 3rem 1rem; }
+    .gallery-item { width: 220px; height: 270px; }
+
+    .testimonial-card { padding: 1.5rem; }
+    .testimonial-text { font-size: 0.95rem; }
+
+    footer { padding: 2.5rem 1rem 1.5rem; }
+    .footer-brand-name { font-size: 2rem; }
   }
 </style>
 </head>
@@ -898,8 +1122,18 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">EHSAN<span>.</span></a>
-  <ul class="nav-links">
+  <div class="nav-logo-wrap">
+    <div class="nav-logo-top">
+      <a href="#" class="nav-logo">EHSAN<span>.</span></a>
+    </div>
+    <small class="nav-logo-sub">Burger &amp; Grill</small>
+  </div>
+  <div class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <ul class="nav-links" id="navLinks">
     <li><a href="#">Home</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#menu">Menu</a></li>
@@ -920,13 +1154,13 @@
       loop
       playsinline
       preload="auto"
-      src="124831-732633121_medium.mp4"
+      src="ehsan_hero_bg.mp4"
     ></video>
   </div>
   <div class="hero-video-overlay"></div>
 
   <!-- 4K quality badge -->
-  <div class="video-quality-badge" style="position:absolute;top:5.5rem;right:2rem;z-index:10;">LIVE · 4K UHD</div>
+  <div class="video-quality-badge" style="position:absolute;top:7rem;right:2rem;z-index:10;">LIVE · 4K UHD</div>
 
   <div class="hero-content">
     <div class="hero-badge">Watauga, TX · Est. Since Day One</div>
@@ -1165,6 +1399,7 @@
       </div>
     </div>
   </div>
+  <div class="testimonial-dots" id="testimonialDots"></div>
 </section>
 
 <!-- FAQ -->
@@ -1240,11 +1475,16 @@
     </div>
   </div>
   <div class="location-map">
-    <div class="map-placeholder">
-      <span class="map-pin">📍</span>
-      <p>Watauga, TX 76148</p>
-      <a href="https://www.google.com/maps/search/?api=1&query=6600+Denton+Hwy+unit+212,+Watauga,+TX+76148" target="_blank">Open in Google Maps</a>
-    </div>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3349.5!2d-97.2547!3d32.8677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864e7d2f1b0e5b8f%3A0x0!2s6600+Denton+Hwy+Unit+212%2C+Watauga%2C+TX+76148!5e0!3m2!1sen!2sus!4v1700000000000"
+      width="100%"
+      height="100%"
+      style="border:0; display:block;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Ehsan Burger & Grill Location">
+    </iframe>
   </div>
 </div>
 
@@ -1252,7 +1492,10 @@
 <footer>
   <div class="footer-top">
     <div>
-      <div class="footer-brand-name">EHSAN<span>.</span></div>
+      <div class="footer-logo-wrap">
+        <span class="footer-brand-name">EHSAN<span>.</span></span>
+        <small class="footer-brand-sub">Burger &amp; Grill</small>
+      </div>
       <p class="footer-desc">Bold flavors, real fire. Handcrafted burgers and Mediterranean comfort food in the heart of Watauga, TX.</p>
       <div class="social-links">
         <a href="#" class="social-link" aria-label="Facebook">f</a>
@@ -1313,6 +1556,39 @@
     el.addEventListener('mouseleave', () => cursor.style.transform = 'translate(-50%,-50%) scale(1)');
   });
 
+  // Nav active state
+  const navLinks = document.querySelectorAll('.nav-links a:not(.nav-cta)');
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+
+  // Mobile hamburger menu toggle
+  const navToggle = document.getElementById('navToggle');
+  const navMenu = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    navToggle.classList.toggle('active');
+    navMenu.classList.toggle('open');
+    document.body.style.overflow = navMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  // Close menu when a nav link is clicked
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navToggle.classList.remove('active');
+      navMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Hide custom cursor on touch devices
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    document.body.style.cursor = 'auto';
+    if (cursor) cursor.style.display = 'none';
+    if (ring) ring.style.display = 'none';
+  }
+
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
@@ -1341,6 +1617,72 @@
       nav.style.borderBottomColor = 'rgba(212,160,23,0.1)';
     }
   });
+
+  // Testimonials slideshow for mobile
+  (function() {
+    const grid = document.querySelector('.testimonials-grid');
+    const dotsContainer = document.getElementById('testimonialDots');
+    if (!grid || !dotsContainer) return;
+
+    const cards = grid.querySelectorAll('.testimonial-card');
+    const isMobile = () => window.innerWidth <= 768;
+
+    function createDots() {
+      dotsContainer.innerHTML = '';
+      cards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.classList.add('testimonial-dot');
+        dot.setAttribute('aria-label', 'Go to review ' + (i + 1));
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+          cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        });
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function updateDots() {
+      if (!isMobile()) return;
+      const dots = dotsContainer.querySelectorAll('.testimonial-dot');
+      const scrollLeft = grid.scrollLeft;
+      const cardWidth = grid.offsetWidth;
+      const activeIndex = Math.round(scrollLeft / cardWidth);
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === activeIndex);
+      });
+    }
+
+    // Auto-slide
+    let autoSlideInterval;
+    function startAutoSlide() {
+      stopAutoSlide();
+      autoSlideInterval = setInterval(() => {
+        if (!isMobile()) return;
+        const cardWidth = grid.offsetWidth;
+        const maxScroll = grid.scrollWidth - cardWidth;
+        if (grid.scrollLeft >= maxScroll - 10) {
+          grid.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          grid.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        }
+      }, 4000);
+    }
+    function stopAutoSlide() {
+      if (autoSlideInterval) clearInterval(autoSlideInterval);
+    }
+
+    grid.addEventListener('scroll', updateDots);
+    grid.addEventListener('touchstart', stopAutoSlide);
+    grid.addEventListener('touchend', () => setTimeout(startAutoSlide, 5000));
+
+    createDots();
+    if (isMobile()) startAutoSlide();
+
+    window.addEventListener('resize', () => {
+      if (isMobile()) { startAutoSlide(); }
+      else { stopAutoSlide(); }
+    });
+  })();
 </script>
 </body>
 </html>
